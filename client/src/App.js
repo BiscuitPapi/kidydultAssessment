@@ -1,25 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import DragDrop from "./Component/DragDrop"
+import React, { useEffect, useState } from "react";
+import DragDrop from "./Component/DragDrop";
 import "./App.css";
+import Box from "@mui/material/Box";
+import Result from "./Component/Result";
 
 function App() {
-  const [backendData, setBackendData] = useState(null)
-
-  useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-      }
-    )
-  }, [])
+  const [result, setResult] = useState(null);
 
   return (
-    <div>
-      <DragDrop/>
-    </div>
-  )
+    <DragDrop/>
+  );
 }
 
-export default App
+export default App;
