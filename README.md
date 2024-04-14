@@ -20,7 +20,12 @@ kidydultAssessment <br />
 
 
  ## Installation Steps
-```
-1) Clone the repository
-**git clone https://github.com/BiscuitPapi/kidydultAssessment.git**
-```
+ 1. Clone the repository
+   ```
+   git clone https://github.com/your_username_/Project-Name.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+
