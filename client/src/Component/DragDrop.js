@@ -1,21 +1,29 @@
-import React, {useState} from 'react'
-import Button from '@mui/material/Button';
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+
+import { FileUploader } from "react-drag-drop-files";
+const fileTypes = ["txt"];
 
 function DragDrop() {
-const [files, setFiles] = useState(null);
+  const [file, setFile] = useState(null);
+  const handleChange = (file) => {};
+
+  const onTypeError = (err) => {
+    alert("Error file type. Please upload a text file");
+  };
 
   return (
-    <>
-        {!files && (
-            <div className ="dropzone">
-                <h1>(Drag and drop your file here)</h1>
-                <Button variant="contained">Upload</Button>
-            </div>
-
-
-        )}
-    </>
-  )
+    <div className="dropzone">
+      <FileUploader
+        handleChange={handleChange}
+        label=""
+        types={fileTypes}
+        onTypeError={onTypeError}
+      >
+        <h1>(Drag and drop your file here)</h1>
+      </FileUploader>
+    </div>
+  );
 }
 
-export default DragDrop
+export default DragDrop;
