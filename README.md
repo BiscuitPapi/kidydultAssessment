@@ -17,4 +17,9 @@ kidydultAssessment <br />
 +--> server
 
 > client refers to the frontend and server refers to the backend
- 
+
+
+ ## Installation Steps
+```
+1) Use the command 
+```
