@@ -12,7 +12,7 @@
 ## Folder Structure
 kidydultAssessment <br />
 | <br />
-+--> client
++--> client <br />
 | <br />
 +--> server
 
