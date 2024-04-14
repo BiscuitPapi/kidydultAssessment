@@ -10,10 +10,10 @@
 - Exception and error handling ✅
 
 ## Folder Structure
-kidydultAssessment
-|
+kidydultAssessment <br />
+| <br />
 +--> client
-|
+| <br />
 +--> server
 
 > client refers to the frontend and server refers to the backend
