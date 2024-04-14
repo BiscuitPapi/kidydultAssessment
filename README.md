@@ -33,3 +33,8 @@ kidydultAssessment <br />
    cd client
    npm start
    ```
+4. Open a new terminal and run the backend
+   ```
+   cd server
+   npm run dev
+   ```
