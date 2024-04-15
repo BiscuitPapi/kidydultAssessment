@@ -34,11 +34,13 @@ function DragDrop(props) {
         alert("The file is empty");
       } else {
         var dataTosend = JSON.stringify(fileContent);
-        const response = await fetch(`/api/sorting?fileContent=${dataTosend}`);
+        const response = await fetch(`api/sorting?fileContent=${dataTosend}`);
         console.log(fileContent);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+
+        console.log(response);
         const data = await response.json();
 
         console.log(data);
