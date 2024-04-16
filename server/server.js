@@ -12,40 +12,57 @@ app.get("/api/sorting", async (req, res) => {
     var rawData = JSON.parse(fileContent.fileContent);
 
     let proceedData = rawData.toString().split("\n");
+
     var i = 0;
-    let obj = [];
-    let list = [];
-    var previousUser = "";
+    var currentUser = "";
+    let unorderedList = [];
+    var flag = 1;
 
-    while (i < proceedData.length) {
-      //Check the user
-      var currentUser = proceedData[i].split(" ")[0];
-      var currentTextCount = wordsCount(
-        proceedData[i].split(" ").slice(1).join(" ")
-      );
-      currentUser = currentUser.replace("<", "").replace(">", "");
-
-      //Set the current user similar to the previous, and amend the current text
-      if (!currentUser.includes("user")) {
-        currentUser = previousUser;
-        currentTextCount = wordsCount(proceedData[i]);
-      }
-
-      let jsonData = { user: currentUser, value: currentTextCount };
-      list.push(jsonData);
-      i++;
-      previousUser = currentUser;
+    //Check if the txt file starts with a user or not
+    if ((proceedData[i].split(" ")[0].charAt(0) != "<") && (proceedData[i].split(" ")[0].charAt(proceedData[i].split(" ")[0].length - 1) != ">")) {
+      flag = 0;
     }
 
-    //Check for distinct user
+    //Loop every new line
+    while (i < proceedData.length) {
+      let words = proceedData[i].split(" ");
+
+      var x = 0;
+      var count = 0;
+      //Check if the current word is user
+      while (x < words.length) {
+        if (words[x] == "") {
+          break;
+        }
+        //If the current word is a user, then assign a new one
+        //This is to cater in cases where the text file is not structured
+        if (
+          words[x].charAt(0) == "<" &&
+          words[x].charAt(words[x].length - 1) == ">"
+        ) {
+          currentUser = words[x];
+          count = 0;
+        } else {
+          count++;
+        }
+        x++;
+      }
+      //Add the filtered line into the JSON
+      let jsonsData = { user: currentUser, value: count };
+      unorderedList.push(jsonsData);
+      i++;
+    }
+
+    //Check for distinct user for us to compare it later
     let userList = [];
-    for (var key in list) {
-      if (list.hasOwnProperty(key)) {
-        if (!userList.includes(list[key].user)) {
-          userList.push(list[key].user);
+    for (var key in unorderedList) {
+      if (unorderedList.hasOwnProperty(key)) {
+        if (!userList.includes(unorderedList[key].user)) {
+          userList.push(unorderedList[key].user);
         }
       }
     }
+
     var counter = 0;
     let newList = [];
 
@@ -53,10 +70,10 @@ app.get("/api/sorting", async (req, res) => {
     while (counter < userList.length) {
       var value = 0;
 
-      for (var key in list) {
-        if (list.hasOwnProperty(key)) {
-          if (list[key].user == userList[counter]) {
-            value = value + list[key].value;
+      for (var key in unorderedList) {
+        if (unorderedList.hasOwnProperty(key)) {
+          if (unorderedList[key].user == userList[counter]) {
+            value = value + unorderedList[key].value;
           }
         }
       }
@@ -65,8 +82,16 @@ app.get("/api/sorting", async (req, res) => {
       counter++;
     }
 
+    var cleanList = [];
+    //Clean the data (remove <>)
+    for (var key in newList) {
+      var name = newList[key].user.replace("<", "").replace(">", "");
+      let jsonData = { user: name, value: newList[key].value };
+      cleanList.push(jsonData);
+    }
+
     //Sort the list in descending order
-    newList = newList.sort((a, b) => {
+    cleanList = cleanList.sort((a, b) => {
       if (a.value > b.value) {
         return -1;
       }
@@ -75,24 +100,37 @@ app.get("/api/sorting", async (req, res) => {
     let sortedList = [];
     var currentRank = 1;
     var previousVal = -1;
-    for (var key in newList) {
-      if (newList.hasOwnProperty(key)) {
-        if(newList[key].value == previousVal)
-        {
-          let jsonData = { user: newList[key].user, value: newList[key].value, rank: '  '};
+    for (var key in cleanList) {
+      if (cleanList.hasOwnProperty(key)) {
+        if (cleanList[key].value == previousVal) {
+          let jsonData = {
+            user: cleanList[key].user,
+            value: cleanList[key].value,
+            rank: "  ",
+          };
           sortedList.push(jsonData);
-          
-        }
-        else{
-          let jsonData = { user: newList[key].user, value: newList[key].value, rank: currentRank+ "."};
+        } else {
+          let jsonData = {
+            user: cleanList[key].user,
+            value: cleanList[key].value,
+            rank: currentRank + ".",
+          };
           sortedList.push(jsonData);
           currentRank++;
         }
       }
-      previousVal = newList[key].value;
+      previousVal = cleanList[key].value;
+    }
+    if(flag == 1){
+      res.send(sortedList);
     }
 
-    res.send(sortedList);
+    else{
+      res.status(404).send;
+      res.send();
+    }
+   
+    
   } catch (error) {
     console.log("Failed to upload file: ", error);
   }

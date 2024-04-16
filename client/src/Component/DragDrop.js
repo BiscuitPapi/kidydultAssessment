@@ -5,14 +5,12 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { FileUploader } from "react-drag-drop-files";
 const fileTypes = ["txt"];
-let fileReader;
+
 
 function DragDrop(props) {
   const [fileContent, setFileContent] = useState(null);
-  const [previousRead, setTest] = useState("");
   const [result, setResult] = useState(null);
   const [fileName, setFileName] = useState(null);
-  const [userFiles, setUserFiles] = useState([]);
 
   const handleChange = (e) => {
     setFileName(e.name);
@@ -37,13 +35,9 @@ function DragDrop(props) {
         const response = await fetch(`api/sorting?fileContent=${dataTosend}`);
         console.log(fileContent);
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          alert("The text file is not in the right format.");
         }
-
-        console.log(response);
         const data = await response.json();
-
-        console.log(data);
         setResult(data);
       }
     } catch (error) {
@@ -70,7 +64,7 @@ function DragDrop(props) {
                 <div>
                   <p>Files ready to be uploaded</p>
                   <ul>
-                   <li>{fileName}</li>
+                    <li>{fileName}</li>
                   </ul>
                 </div>
               )}
