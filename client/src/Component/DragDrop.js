@@ -6,19 +6,23 @@ import "bootstrap/dist/css/bootstrap.css";
 import { FileUploader } from "react-drag-drop-files";
 const fileTypes = ["txt"];
 
-
-function DragDrop(props) {
-  const [fileContent, setFileContent] = useState(null);
+function DragDrop() {
+  const [fileContent, setFileContent] = useState("null");
   const [result, setResult] = useState(null);
   const [fileName, setFileName] = useState(null);
 
-  const handleChange = (e) => {
-    setFileName(e.name);
+  function readFile(file) {
     const fr = new FileReader();
-    fr.readAsText(e);
-    fr.onload = function () {
-      setFileContent(fr.result);
+    var string = "s";
+    fr.readAsText(file);
+    fr.onload = (event) => {
+      setFileContent(event.target.result)
     };
+    return string;
+  }
+  const handleChange = (e) => {
+    console.log(e.length);
+    readFile(e);
   };
 
   //Error handling to make sure that user only uploads txt file

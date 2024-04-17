@@ -22,3 +22,8 @@
     align-items: center; 
     text-align: center;
 }
+
+.custom-file-uploader {
+  width: 400px;
+  height: 40px;
+}
